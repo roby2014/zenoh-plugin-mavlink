@@ -1,0 +1,63 @@
+////
+//// This file presents the default configuration used by both the `zenoh-plugin-mavlink` plugin and the `zenoh-bridge-mavlink` standalone executable.
+//// The "mavlink" JSON5 object below can be used as such in the "plugins" part of a config file for the zenoh router (zenohd).
+////
+{
+  plugins: {
+    mavlink: {
+      /// Specifies the capacity of the broadcast channel used for message distribution. The default value is 32.
+      /// This determines how many messages can be buffered in the channel before older messages are dropped.
+      broadcast_channel_capacity: 32,
+
+      /// An array of MAVLink connection configurations. Each connection specifies an endpoint and the MAVLink version to be used.
+      mavlink_connections: [
+        {
+          /// The endpoint for the MAVLink connection.
+          endpoint: "serial:/dev/ttyACM2:115200",
+
+          /// The version of the MAVLink protocol to be used for this connection. Supported values are: '1' and '2'.
+          mavlink_version: 2,
+        },
+        {
+          endpoint: "udpout:0.0.0.0:1337",
+          mavlink_version: 2,
+        },
+      ],
+    },
+  },
+
+  ////
+  //// zenoh related configuration (see zenoh documentation for more details)
+  ////
+
+  ////
+  //// id: The identifier (as hex-string) that zenoh-bridge-mavlink must use. If not set, a random UUIDv4 will be used.
+  //// WARNING: this id must be unique in your zenoh network.
+  // id: "A00001",
+
+  ////
+  //// mode: The bridge's mode (peer or client)
+  ////
+  //mode: "client",
+
+  ////
+  //// Which endpoints to connect to. E.g. tcp/localhost:7447.
+  //// By configuring the endpoints, it is possible to tell zenoh which router/peer to connect to at startup.
+  ////
+  connect: {
+    endpoints: [
+      // "<proto>/<ip>:<port>"
+    ],
+  },
+
+  ////
+  //// Which endpoints to listen on. E.g. tcp/localhost:7447.
+  //// By configuring the endpoints, it is possible to tell zenoh which are the endpoints that other routers,
+  //// peers, or client can use to establish a zenoh session.
+  ////
+  listen: {
+    endpoints: [
+      // "<proto>/<ip>:<port>"
+    ],
+  },
+}

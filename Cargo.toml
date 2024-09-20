@@ -1,0 +1,27 @@
+[workspace]
+members = ["zenoh-plugin-mavlink", "zenoh-bridge-mavlink"]
+resolver = "2"
+
+[workspace.package]
+authors = ["Roberto Petrisoru <roby2x14@gmail.com>"]
+edition = "2021"
+license = ""
+homepage = ""
+repository = "https://github.com/roby2014/zenoh-plugin-mavlink"
+version = "0.1.0"
+
+[workspace.dependencies]
+async-std = "=1.12.0"
+serde = "1.0.154"
+serde_json = "1.0.94"
+mavlink = { git = "https://github.com/roby2014/rust-mavlink", branch = "async_serial", features = [
+    "tokio-1",
+] }
+git-version = "0.3.5"
+tokio = { version = "1.37.0", features = ["macros", "sync"] }
+tracing = "0.1.40"
+zenoh = { version = "0.11.0", features = ["plugins", "unstable"] }
+zenoh-plugin-trait = "0.11.0"
+zenoh-util = "0.11.0"
+zenoh-plugin-mavlink = { version = "0.1.0", path = "zenoh-plugin-mavlink/", default-features = false }
+chrono = { version = "0.4.38", default-features = false }
