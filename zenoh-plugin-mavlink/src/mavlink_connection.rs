@@ -11,7 +11,7 @@ use tokio::{
     select,
     sync::broadcast::{Receiver, Sender},
 };
-use tracing::{debug, error, info, instrument};
+use tracing::{debug, error, info, instrument, trace};
 
 use crate::protocol::Protocol;
 
@@ -77,9 +77,16 @@ impl MAVLinkConnection {
                 res = broadcast_channel.1.recv() => {
                     match res {
                         Ok(msg) => {
-                            debug!("received message (id: {}) from broadcast channel (origin: {})", msg.raw_message.message_id(), msg.origin);
+                            trace!("received message from broadcast channel");
+                            // we only consume and write if its not the message we emitted
+                            if msg.origin == self.endpoint { // FIXME: is this slow
+                                trace!("ignoring messsage because it was produced by the same origin");
+                                continue;
+                            }
+
                             let mut bytes = AsyncPeekReader::new(msg.raw_message.raw_bytes());
                             let (header, message): (mavlink::MavHeader, mavlink::common::MavMessage) = mavlink::read_v2_msg_async(&mut bytes).await.unwrap();
+                            debug!("received message (id: {}) from broadcast channel (origin: {})", msg.raw_message.message_id(), msg.origin);
 
                             if let Err(e) = connection.send(&header, &message).await {
                                 error!("failed to write to mavlink connection {}: {:?}", self.endpoint, e);
