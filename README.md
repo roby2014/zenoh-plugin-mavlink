@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/eclipse-zenoh/zenoh/main/zenoh-dragon.png" height="150">
 
 <!---
-[![CI](https://github.com/eclipse-zenoh/zenoh-plugin-dds/workflows/Rust/badge.svg)](https://github.com/eclipse-zenoh/zenoh-plugin-dds/actions?query=workflow%3ARust)
+[![CI](https://github.com/roby2014/zenoh-plugin-mavlink/workflows/Rust/badge.svg)](https://github.com/roby2014/zenoh-plugin-mavlink/actions?query=workflow%3ARust)
 --->
 [![Discussion](https://img.shields.io/badge/discussion-on%20github-blue)](https://github.com/eclipse-zenoh/roadmap/discussions)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-blue)](https://discord.gg/2GJ958VuHs)
@@ -60,6 +60,11 @@ $ cargo build --release
 
 The standalone executable binary `zenoh-bridge-mavlink` and a plugin shared library (`*.so` on Linux, `*.dylib` on Mac OS, `*.dll` on Windows) to be dynamically
 loaded by the zenoh router `zenohd` will be generated in the `target/release` subdirectory.
+
+Example:
+```bash
+$ RUST_LOG=debug cargo run --bin zenoh-bridge-mavlink -- -c DEFAULT_CONFIG.json5
+```
 
 -------------------------------
 # Usage

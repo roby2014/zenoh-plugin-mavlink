@@ -1,9 +1,11 @@
+use std::str::FromStr;
+
 use mavlink::{
     async_peek_reader::AsyncPeekReader, common::MavMessage, MAVLinkV2MessageRaw, MavlinkVersion,
 };
 use serde::{
     de::{self, Visitor},
-    Deserialize, Deserializer,
+    Deserialize, Deserializer, Serialize,
 };
 use tokio::{
     select,
@@ -13,7 +15,7 @@ use tracing::{debug, error, info, instrument};
 
 use crate::protocol::Protocol;
 
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct MAVLinkConnection {
     /// MAVLink endpoint, following [`mavlink::connect_async`] protocols.
     #[serde(default)]
