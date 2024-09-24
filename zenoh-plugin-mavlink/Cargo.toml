@@ -19,13 +19,13 @@ dynamic_plugin = []
 
 [dependencies]
 tokio = { workspace = true }
-async-std = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 tracing = { workspace = true }
+lazy_static = {workspace = true}
 mavlink = { workspace = true }
 git-version = { workspace = true }
-zenoh = { workspace = true }
-zenoh-plugin-trait = { workspace = true }
-zenoh-util = { workspace = true }
 chrono = { workspace = true }
+zenoh = { workspace = true }
+zenoh-ext = { workspace = true }
+zenoh-plugin-trait = { workspace = true }
