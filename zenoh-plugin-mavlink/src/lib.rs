@@ -3,10 +3,12 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Arc;
 
 use liveliness::{ke_liveliness_plugin, ke_liveliness_pub, ke_liveliness_sub};
+use mavio::MavFrame;
 use protocol::Protocol;
 use tokio::task::{JoinHandle, JoinSet};
-use tracing::{debug, error, info};
+use tracing::{debug, debug_span, error, info};
 use tracing::{info_span, Instrument};
+use zenoh::bytes::ZBytes;
 use zenoh::{
     internal::{
         plugins::{RunningPlugin, RunningPluginTrait, ZenohPlugin},
@@ -144,55 +146,61 @@ pub(crate) struct MAVLinkPluginRuntime {
 impl MAVLinkPluginRuntime {
     async fn run(&self) {
         // spawn broadcast channel
-        let (tx, mut rx) =
+        let (tx, rx) =
             tokio::sync::broadcast::channel::<Protocol>(self.config.broadcast_channel_capacity);
 
         // spawn task for each mavlink connection
         let mut set = JoinSet::new();
         for mav_conn in self.config.mavlink_connections.clone() {
-            debug!("spawning task for {mav_conn:?}");
+            info!("spawning task for {mav_conn:?}");
             set.spawn(mav_conn.handle((tx.clone(), rx.resubscribe())));
         }
 
         // launch task to handle outgoing data for the zenoh network
-        let zsession = self.zsession.clone();
-        tokio::spawn(async move {
-            let ke = keformat!(ke_liveliness_pub::formatter(), zenoh_id = "*",).unwrap();
-            let publisher = zsession.declare_publisher(ke).await.unwrap();
+        if self.config.to_zenoh {
+            info!("spawning to_zenoh task");
+            let zsession = self.zsession.clone();
+            tokio::spawn(
+                async move {
+                    let ke = keformat!(ke_liveliness_pub::formatter(), zenoh_id = "*",).unwrap();
+                    let publisher = zsession.declare_publisher(ke.clone()).await.unwrap();
 
-            match rx.recv().await {
-                Ok(msg) => {
-                    publisher
-                        .put("TODO: publish mavlink message")
-                        .await
-                        .unwrap();
-                    debug!("forwarded message from broadcast channel to zenoh");
+                    let mut rx = rx.resubscribe();
+                    loop {
+                        match rx.recv().await {
+                            Ok(msg) => {
+                                publisher.put(ZBytes::from(msg)).await.unwrap();
+                                debug!("forwarded message from broadcast channel to zenoh: {}", ke);
+                            }
+                            Err(e) => {
+                                error!("failed to read from broadcast channel: {e}");
+                            }
+                        }
+                    }
                 }
-                Err(e) => {
-                    error!("failed to read from broadcast channel: {e}");
-                }
-            }
-        })
-        .instrument(info_span!("zenoh_pub_mav_out"))
-        .await
-        .unwrap();
+                .instrument(debug_span!("zenoh_pub_mav_out")),
+            );
+        }
 
         // launch task to handle incoming data for the zenoh network
-        let zsession = self.zsession.clone();
-        tokio::spawn(async move {
-            let ke = keformat!(ke_liveliness_sub::formatter(), zenoh_id = "*",).unwrap();
-            let subscriber = zsession.declare_subscriber(ke).await.unwrap();
+        if self.config.to_zenoh {
+            info!("spawning from_zenoh task");
+            let zsession = self.zsession.clone();
+            tokio::spawn(
+                async move {
+                    let ke = keformat!(ke_liveliness_sub::formatter(), zenoh_id = "*",).unwrap();
+                    let subscriber = zsession.declare_subscriber(ke).await.unwrap();
 
-            while let Ok(sample) = subscriber.recv_async().await {
-                debug!("received message from zenoh");
-                // TODO: serialize to mavlink raw?
-                // TODO: tx.send(msg)
-                debug!("forwarded message from zenoh to broadcast channel");
-            }
-        })
-        .instrument(info_span!("zenoh_sub_mav_in"))
-        .await
-        .unwrap();
+                    while let Ok(sample) = subscriber.recv_async().await {
+                        debug!("received message from zenoh");
+                        // TODO: serialize to mavlink raw?
+                        // TODO: tx.send(msg)
+                        debug!("forwarded message from zenoh to broadcast channel");
+                    }
+                }
+                .instrument(debug_span!("zenoh_sub_mav_in")),
+            );
+        }
 
         // only abort if all mavlink tasks were shutdown for some reason
         while let Some(res) = set.join_next().await {
@@ -200,5 +208,24 @@ impl MAVLinkPluginRuntime {
         }
 
         error!("all connections aborted!");
+    }
+}
+
+impl From<Protocol> for ZBytes {
+    fn from(value: Protocol) -> Self {
+        let mav_frame = value.mav_frame;
+        let raw_frame = mav_frame.into_versionless();
+        let header = raw_frame.header();
+        let header_bytes = header.decode();
+        let payload_bytes = raw_frame.payload().bytes();
+        let checksum = raw_frame.checksum();
+
+        let mut zbytes = Vec::new();
+        zbytes.extend_from_slice(header_bytes.as_slice());
+        zbytes.extend_from_slice(payload_bytes);
+        zbytes.extend_from_slice(&checksum.to_le_bytes());
+        // TODO? signature?
+
+        ZBytes::from(zbytes)
     }
 }
