@@ -7,19 +7,25 @@
     mavlink: {
       /// Specifies the capacity of the broadcast channel used for message distribution. The default value is 32.
       /// This determines how many messages can be buffered in the channel before older messages are dropped.
-      broadcast_channel_capacity: 32,
+      broadcast_channel_capacity: 512,
+
+      /// Specifies if MAVLink (outgoing) data should be distributed across Zenoh network.
+      to_zenoh: true,
+      
+      /// Specifies if MAVLink (incoming) data should be accepted from Zenoh network.
+      from_zenoh: false,
 
       /// An array of MAVLink connection configurations. Each connection specifies an endpoint and the MAVLink version to be used.
       mavlink_connections: [
         {
           /// The endpoint for the MAVLink connection.
-          endpoint: "serial:/dev/ttyACM2:115200",
+          endpoint: "serial:/dev/ttyACM1:115200",
 
           /// The version of the MAVLink protocol to be used for this connection. Supported values are: '1' and '2'.
           mavlink_version: 2,
         },
         {
-          endpoint: "udpout:0.0.0.0:1337",
+          endpoint: "tcpin:0.0.0.0:1337",
           mavlink_version: 2,
         },
       ],
@@ -58,6 +64,7 @@
   listen: {
     endpoints: [
       // "<proto>/<ip>:<port>"
+      "udp/192.168.99.66:6000"
     ],
   },
 }

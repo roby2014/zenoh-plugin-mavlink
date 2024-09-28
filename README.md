@@ -107,10 +107,9 @@ This dual capability enhances interoperability and facilitates robust communicat
 
 ### IN/OUT Zenoh key expressions
 
-In summary, the message flow is structured as follows:
-- The plugin operates with one subscriber and one publisher:
-  - Subscriber: `/mavlink/in` - The plugin consumes messages from this key expression and forwards them to the MAVLink network.
-  - Publisher: `/mavlink/out` - The plugin publishes messages received from the MAVLink network to this key expression.
+The plugin operates with one subscriber and one publisher for the Zenoh part:
+  - Subscriber: `@/*/@mavlink/v2/in` - The plugin consumes messages from this key expression and forwards them to the MAVLink network.
+  - Publisher: `@/*/@mavlink/v2/out` - The plugin publishes messages received from the MAVLink network to this key expression.
 
 ### Internal communication
 

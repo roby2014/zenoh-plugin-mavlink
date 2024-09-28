@@ -16,9 +16,6 @@ futures = "0.3.26"
 clap = "4.4.11"
 serde = "1.0.154"
 serde_json = "1.0.114"
-mavlink = { git = "https://github.com/roby2014/rust-mavlink", branch = "async_serial", features = [
-    "tokio-1",
-] }
 chrono = { version = "0.4.38", default-features = false }
 git-version = "0.3.5"
 tokio = { version = "1.35.1", default-features = false } # Default features are disabled due to some crates' requirements
@@ -37,3 +34,4 @@ zenoh-ext = { version = "1.0.0-dev", git = "https://github.com/eclipse-zenoh/zen
 zenoh-plugin-rest = { version = "1.0.0-dev", git = "https://github.com/eclipse-zenoh/zenoh.git", branch = "main", default-features = false, features=["static_plugin"]}
 zenoh-plugin-trait = { version = "1.0.0-dev", git = "https://github.com/eclipse-zenoh/zenoh.git", branch = "main", default-features = false }
 zenoh-plugin-mavlink = { version = "1.0.0-dev", path = "zenoh-plugin-mavlink/", default-features = false }
+mavio = { git = "https://github.com/roby2014/mavio", rev =  "a6847f8a859faf65d73e4a6b0b327c8c20470416", features = ["async"]}

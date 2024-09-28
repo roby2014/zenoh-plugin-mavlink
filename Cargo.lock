@@ -675,6 +675,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "981520c98f422fcc584dc1a95c334e6953900b9106bc47a9839b81790009eb21"
 
 [[package]]
+name = "cargo-manifest"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bf6ff49a028a52bf61913e19f5ba3b9bd34145cc97eb1649865576c8f06b408d"
+dependencies = [
+ "serde",
+ "thiserror",
+ "toml",
+]
+
+[[package]]
 name = "cc"
 version = "1.1.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1630,15 +1641,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ioctl-rs"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7970510895cee30b3e9128319f2cefd4bde883a39f38baa279567ba3a7eb97d"
-dependencies = [
- "libc",
-]
-
-[[package]]
 name = "ipnetwork"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1879,45 +1881,95 @@ dependencies = [
 ]
 
 [[package]]
-name = "mavlink"
-version = "0.13.2"
-source = "git+https://github.com/roby2014/rust-mavlink?branch=async_serial#85cd5e195ab5b02cf562ca4cb7b00da72bdd02f3"
+name = "mavinspect"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "71ebfe14786404c883e6a248a5417ada078f1df9756137037517826114479983"
 dependencies = [
- "bitflags 1.3.2",
- "mavlink-bindgen",
- "mavlink-core",
- "num-derive",
- "num-traits",
- "serde",
- "serde_arrays",
-]
-
-[[package]]
-name = "mavlink-bindgen"
-version = "0.13.2"
-source = "git+https://github.com/roby2014/rust-mavlink?branch=async_serial#85cd5e195ab5b02cf562ca4cb7b00da72bdd02f3"
-dependencies = [
+ "bitflags 2.6.0",
  "crc-any",
- "lazy_static",
- "proc-macro2",
+ "heck",
+ "log",
  "quick-xml",
- "quote",
+ "regex",
+ "serde",
  "thiserror",
 ]
 
 [[package]]
-name = "mavlink-core"
-version = "0.14.0"
-source = "git+https://github.com/roby2014/rust-mavlink?branch=async_serial#85cd5e195ab5b02cf562ca4cb7b00da72bdd02f3"
+name = "mavio"
+version = "0.2.6"
+source = "git+https://github.com/roby2014/mavio?rev=a6847f8a859faf65d73e4a6b0b327c8c20470416#a6847f8a859faf65d73e4a6b0b327c8c20470416"
 dependencies = [
- "async-trait",
- "byteorder",
+ "bitflags 2.6.0",
  "crc-any",
+ "mavspec",
+ "paste",
  "serde",
  "serde_arrays",
- "serial",
+ "sha2 0.10.8",
+ "tbytes",
+ "thiserror",
  "tokio",
  "tokio-serial",
+ "tokio-util",
+ "udp-stream",
+]
+
+[[package]]
+name = "mavspec"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4d343116a25eb41d3aacfbf93e5472de4432fe5dd62b38b182d862a6cec17a62"
+dependencies = [
+ "mavspec_rust_derive",
+ "mavspec_rust_gen",
+ "mavspec_rust_spec",
+]
+
+[[package]]
+name = "mavspec_rust_derive"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "20d1e1fe2364d1508ed27bd41a27baeada2977e432d857618a5fdc6f704edde4"
+dependencies = [
+ "crc-any",
+ "heck",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.77",
+ "thiserror",
+]
+
+[[package]]
+name = "mavspec_rust_gen"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d91642ee37f93096229bd61a4315fb7dd8ae1115a67f82c0add63604d3902b3e"
+dependencies = [
+ "base64 0.22.1",
+ "cargo-manifest",
+ "heck",
+ "log",
+ "mavinspect",
+ "prettyplease",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "serde_json",
+ "syn 2.0.77",
+ "thiserror",
+]
+
+[[package]]
+name = "mavspec_rust_spec"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6866ac044f92ba8edd4d00df286c7523d26d8c4c4457c32389341ccf258dbeb9"
+dependencies = [
+ "bitflags 2.6.0",
+ "serde",
+ "tbytes",
 ]
 
 [[package]]
@@ -2108,17 +2160,6 @@ name = "num-conv"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
-
-[[package]]
-name = "num-derive"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed3955f1a9c7c0c15e092f9c887db08b1fc683305fdf6eb6684f22555355e202"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.77",
-]
 
 [[package]]
 name = "num-integer"
@@ -2532,6 +2573,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "prettyplease"
+version = "0.2.22"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "479cf940fbbb3426c32c5d5176f62ad57549a0bb84773423ba8be9d089f5faba"
+dependencies = [
+ "proc-macro2",
+ "syn 2.0.77",
+]
+
+[[package]]
 name = "proc-macro-hack"
 version = "0.5.20+deprecated"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2548,9 +2599,9 @@ dependencies = [
 
 [[package]]
 name = "quick-xml"
-version = "0.36.2"
+version = "0.31.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7649a7b4df05aed9ea7ec6f628c67c9953a43869b8bc50929569b2999d443fe"
+checksum = "1004a344b30a54e2ee58d66a71b32d2db2feb0a31f9a2d302bf0536f15de2a33"
 dependencies = [
  "memchr",
 ]
@@ -3165,6 +3216,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_spanned"
+version = "0.6.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87607cb1398ed59d48732e575a4c28a7a8ebf2454b964fe3f224f2afc07909e1"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "serde_urlencoded"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3187,48 +3247,6 @@ dependencies = [
  "ryu",
  "serde",
  "unsafe-libyaml",
-]
-
-[[package]]
-name = "serial"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1237a96570fc377c13baa1b88c7589ab66edced652e43ffb17088f003db3e86"
-dependencies = [
- "serial-core",
- "serial-unix",
- "serial-windows",
-]
-
-[[package]]
-name = "serial-core"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3f46209b345401737ae2125fe5b19a77acce90cd53e1658cda928e4fe9a64581"
-dependencies = [
- "libc",
-]
-
-[[package]]
-name = "serial-unix"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f03fbca4c9d866e24a459cbca71283f545a37f8e3e002ad8c70593871453cab7"
-dependencies = [
- "ioctl-rs",
- "libc",
- "serial-core",
- "termios",
-]
-
-[[package]]
-name = "serial-windows"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15c6d3b776267a75d31bbdfd5d36c0ca051251caafc285827052bc53bcdc8162"
-dependencies = [
- "libc",
- "serial-core",
 ]
 
 [[package]]
@@ -3599,12 +3617,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "termios"
-version = "0.2.2"
+name = "tbytes"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5d9cf598a6d7ce700a4e6a9199da127e6819a61e64b68609683cc9a01b5683a"
+checksum = "6db9d948e03cf2d8b332431588f65b8ef1bc0572f1c30434f96dd62241ffd074"
 dependencies = [
- "libc",
+ "serde",
 ]
 
 [[package]]
@@ -3832,6 +3850,41 @@ dependencies = [
 ]
 
 [[package]]
+name = "toml"
+version = "0.8.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1ed1f98e3fdc28d6d910e6737ae6ab1a93bf1985935a1193e68f93eeb68d24e"
+dependencies = [
+ "indexmap",
+ "serde",
+ "serde_spanned",
+ "toml_datetime",
+ "toml_edit",
+]
+
+[[package]]
+name = "toml_datetime"
+version = "0.6.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0dd7358ecb8fc2f8d014bf86f6f638ce72ba252a2c3a2572f2a795f1d23efb41"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "toml_edit"
+version = "0.22.22"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ae48d6208a266e853d946088ed816055e556cc6028c5e8e2b84d9fa5dd7c7f5"
+dependencies = [
+ "indexmap",
+ "serde",
+ "serde_spanned",
+ "toml_datetime",
+ "winnow",
+]
+
+[[package]]
 name = "tracing"
 version = "0.1.40"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3951,6 +4004,17 @@ name = "ucd-trie"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed646292ffc8188ef8ea4d1e0e0150fb15a5c2e12ad9b8fc191ae7a8a7f3c4b9"
+
+[[package]]
+name = "udp-stream"
+version = "0.0.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf021324a3dc10f5b46ab1c1cf5635e6a81b5559971967b806674673a5f2a18e"
+dependencies = [
+ "bytes",
+ "log",
+ "tokio",
+]
 
 [[package]]
 name = "uhlc"
@@ -4474,6 +4538,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
 
 [[package]]
+name = "winnow"
+version = "0.6.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "36c1fec1a2bb5866f07c25f68c26e565c4c200aebb96d7e55710c19d3e8ac49b"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
 name = "x509-parser"
 version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4841,7 +4914,7 @@ dependencies = [
  "chrono",
  "git-version",
  "lazy_static",
- "mavlink",
+ "mavio",
  "serde",
  "serde_json",
  "tokio",
