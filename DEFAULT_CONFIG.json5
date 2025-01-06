@@ -5,9 +5,9 @@
 {
   plugins: {
     mavlink: {
-      /// Specifies the capacity of the broadcast channel used for message distribution. The default value is 32.
+      /// Specifies the capacity of the broadcast channel used for message distribution.
       /// This determines how many messages can be buffered in the channel before older messages are dropped.
-      broadcast_channel_capacity: 512,
+      broadcast_channel_capacity: 16384,
 
       /// Specifies if MAVLink (outgoing) data should be distributed across Zenoh network.
       to_zenoh: true,
@@ -25,7 +25,11 @@
           mavlink_version: 2,
         },
         {
-          endpoint: "tcpin:192.168.99.66:1337",
+          endpoint: "tcpin:0.0.0.0:1337",
+          mavlink_version: 2,
+        },
+        {
+          endpoint: "udpout:0.0.0.0:1338",
           mavlink_version: 2,
         },
       ],

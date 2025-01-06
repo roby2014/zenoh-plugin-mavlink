@@ -5,7 +5,7 @@ use crate::mavlink_connection::MAVLinkConnection;
 pub const DEFAULT_NODENAME: &str = "zenoh_bridge_mavlink";
 pub const DEFAULT_WORK_THREAD_NUM: usize = 2;
 pub const DEFAULT_MAX_BLOCK_THREAD_NUM: usize = 50;
-pub const DEFAULT_BROADCAST_CHANNEL_CAPACITY: usize = 1024;
+pub const DEFAULT_BROADCAST_CHANNEL_CAPACITY: usize = 16384;
 
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields)]
