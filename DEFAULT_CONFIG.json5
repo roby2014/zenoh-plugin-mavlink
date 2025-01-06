@@ -11,7 +11,7 @@
 
       /// Specifies if MAVLink (outgoing) data should be distributed across Zenoh network.
       to_zenoh: true,
-      
+
       /// Specifies if MAVLink (incoming) data should be accepted from Zenoh network.
       from_zenoh: false,
 
@@ -25,7 +25,7 @@
           mavlink_version: 2,
         },
         {
-          endpoint: "tcpin:0.0.0.0:1337",
+          endpoint: "tcpin:192.168.99.66:1337",
           mavlink_version: 2,
         },
       ],
@@ -64,7 +64,7 @@
   listen: {
     endpoints: [
       // "<proto>/<ip>:<port>"
-      "udp/192.168.99.66:6000"
+      "udp/0.0.0.0:6000"
     ],
   },
 }

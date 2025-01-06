@@ -22,16 +22,20 @@ tokio = { version = "1.35.1", default-features = false } # Default features are 
 tracing = "0.1.40"
 lazy_static = "1.4.0"
 zenoh = { version = "1.0.0-dev", git = "https://github.com/eclipse-zenoh/zenoh.git", branch = "main", features = [
-  "internal",
-  "internal_config",
-  "unstable",
-  "plugins",
+    "internal",
+    "internal_config",
+    "unstable",
+    "plugins",
 ] }
 zenoh-config = { version = "1.0.0-dev", git = "https://github.com/eclipse-zenoh/zenoh.git", branch = "main", default-features = false }
 zenoh-ext = { version = "1.0.0-dev", git = "https://github.com/eclipse-zenoh/zenoh.git", branch = "main", features = [
-  "unstable",
+    "unstable",
 ] }
-zenoh-plugin-rest = { version = "1.0.0-dev", git = "https://github.com/eclipse-zenoh/zenoh.git", branch = "main", default-features = false, features=["static_plugin"]}
+zenoh-plugin-rest = { version = "1.0.0-dev", git = "https://github.com/eclipse-zenoh/zenoh.git", branch = "main", default-features = false, features = [
+    "static_plugin",
+] }
 zenoh-plugin-trait = { version = "1.0.0-dev", git = "https://github.com/eclipse-zenoh/zenoh.git", branch = "main", default-features = false }
 zenoh-plugin-mavlink = { version = "1.0.0-dev", path = "zenoh-plugin-mavlink/", default-features = false }
-mavio = { git = "https://github.com/roby2014/mavio", rev =  "a6847f8a859faf65d73e4a6b0b327c8c20470416", features = ["async"]}
+mavio = { git = "https://github.com/roby2014/mavio", rev = "4a30bf6735ac92043c8f2cfc62a588b8b07758af", features = [
+    "async",
+] }
